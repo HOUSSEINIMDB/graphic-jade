@@ -82,8 +82,6 @@ public class ConteneurPriseur extends Application {
             e.printStackTrace();
         }
     }
-    // Mettre à jour le thread de l'interface utilisateur par les message qui
-    // arrivent à l’aide de Platform.runLater de JavaFX
     public void afficherMessages(ACLMessage aclMessage)
     {
         Platform.runLater(()->{ // Mise à jour de l'interface utilisateur

@@ -57,7 +57,7 @@ public class Acheteur2 extends GuiAgent {
                         // pour repondre au message
                         ACLMessage rp=new ACLMessage(ACLMessage.PROPOSE);
                         rp.addReceiver(msg.getSender());
-                        rp.setContent(String.valueOf((Double.parseDouble((msg.getContent())))*1.05));
+                        rp.setContent(String.valueOf((Double.parseDouble((msg.getContent())))+15));
                         send(rp);
                     }
                     if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {

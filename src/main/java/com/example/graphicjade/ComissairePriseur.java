@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ComissairePriseur extends GuiAgent {
     protected ConteneurPriseur conteneurPriseur;//le conteneur de l'agent
-    protected List<AID> sellerAgents = new ArrayList<>();//les acheteurs aux enchères
+    protected List<AID> acheteursAgents = new ArrayList<>();//les acheteurs aux enchères
     protected List<ACLMessage> receivedPrices = new ArrayList<>();//les prix reçus
     protected double currentmaxPrice = 0.0;//variable pour le prix du produit qui va monter
 
@@ -50,14 +50,14 @@ public class ComissairePriseur extends GuiAgent {
         if (guiEvent.getType() == 2) {
             // ici on scelle une enchère à plusieurs tours
             if(finalisable)
-                sendMaxPriceToClient(currentmaxPrice);
+                sendMaxPriceToVendeur(currentmaxPrice);
         }
     }
 
     private void askPricesToSellers(double prixAVaincre) {
         ACLMessage request = new ACLMessage(ACLMessage.CFP);
         //Tour a tour on propose et les agents acheteurs aux enchères repondent chacun son tour
-        for (AID sellerAgent : sellerAgents) {
+        for (AID sellerAgent : acheteursAgents) {
             request.addReceiver(sellerAgent);
             request.setContent(String.valueOf(prixAVaincre));
             send(request);
@@ -89,9 +89,9 @@ public class ComissairePriseur extends GuiAgent {
         return currentmaxPrice;
     }
 
-    private void sendMaxPriceToClient(double maxPrice) {
+    private void sendMaxPriceToVendeur(double maxPrice) {
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-        msg.addReceiver(new AID("Client", AID.ISLOCALNAME));
+        msg.addReceiver(new AID("Vendeur", AID.ISLOCALNAME));
         msg.setContent(Double.toString(maxPrice));
         send(msg);
     }
@@ -145,9 +145,9 @@ public class ComissairePriseur extends GuiAgent {
                     DFAgentDescription[] result = DFService.search(myAgent, template);
                     //On clear car peut etre d'autres agents sont sortis du DF et sont
                     //toujours dans notre liste
-                    sellerAgents.clear();
+                    acheteursAgents.clear();
                     for (DFAgentDescription sellerDesc : result) {
-                        sellerAgents.add(sellerDesc.getName());
+                        acheteursAgents.add(sellerDesc.getName());
                     }
                 } catch (FIPAException fe) {
                     fe.printStackTrace();
